@@ -1,36 +1,37 @@
-name: React CI/CD with GitHub Pages
+name: Deploy React App to GitHub Pages
 
 on:
   push:
     branches:
-      - main  # Trigger on pushes to the main branch
+      - main  # Trigger deployment on pushes to the main branch
 
 jobs:
-  build-deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      # Checkout the repository
+      # Step 1: Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Set up Node.js
-      - name: Setup Node.js
+      # Step 2: Set up Node.js environment
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
-        
-      # Install dependencies
+          node-version: '18'  # Ensure Node.js 18.x is used
+
+      # Step 3: Install dependencies
       - name: Install dependencies
         run: npm install
 
-      # Build the React app
-      - name: Build the app
+      # Step 4: Build the project
+      - name: Build the project
         run: npm run build
 
-      # Deploy to GitHub Pages
+      # Step 5: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
-        if: github.ref == 'refs/heads/main'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: build
+          cname: satpalsorout.github.io  # Use your custom domain if applicable
